@@ -1,1 +1,607 @@
-# xinyue
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>星月 Xinyue - 個人介紹</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', 'Microsoft JhengHei', sans-serif;
+            line-height: 1.6;
+            color: #e0e0e0;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+            background: #000008;
+        }
+        
+        /* 左上角製作標籤 */
+        .credit {
+            position: fixed;
+            top: 16px;
+            left: 20px;
+            z-index: 10;
+            color: rgba(180, 200, 255, 0.25);
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+            pointer-events: none;
+            user-select: none;
+            transition: color 0.5s;
+        }
+
+        .credit:hover {
+            color: rgba(180, 200, 255, 0.5);
+        }
+        
+        .animated-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            animation: bgShift 15s ease-in-out infinite;
+            background: linear-gradient(135deg, #000015, #0a0f30, #000020);
+        }
+        
+        @keyframes bgShift {
+            0%, 100% { background: linear-gradient(135deg, #000015, #0a0f30, #000020); }
+            25% { background: linear-gradient(160deg, #000020, #0c1438, #000015); }
+            50% { background: linear-gradient(180deg, #000018, #0e1835, #000022); }
+            75% { background: linear-gradient(200deg, #000012, #081028, #000018); }
+        }
+        
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(100px);
+            animation: floatOrb var(--duration) ease-in-out infinite;
+        }
+        
+        .orb-1 {
+            width: 450px;
+            height: 450px;
+            background: radial-gradient(circle, rgba(25, 50, 160, 0.45), rgba(10, 20, 80, 0.2), transparent);
+            top: -150px;
+            left: -100px;
+            --duration: 10s;
+        }
+        
+        .orb-2 {
+            width: 380px;
+            height: 380px;
+            background: radial-gradient(circle, rgba(20, 40, 130, 0.4), rgba(5, 15, 60, 0.15), transparent);
+            bottom: -120px;
+            right: -80px;
+            --duration: 13s;
+        }
+        
+        .orb-3 {
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(35, 65, 180, 0.35), rgba(15, 25, 90, 0.15), transparent);
+            top: 40%;
+            left: 60%;
+            --duration: 11s;
+        }
+        
+        .orb-4 {
+            width: 250px;
+            height: 250px;
+            background: radial-gradient(circle, rgba(30, 55, 150, 0.3), rgba(8, 18, 70, 0.1), transparent);
+            top: 55%;
+            left: 20%;
+            --duration: 14s;
+        }
+        
+        @keyframes floatOrb {
+            0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.35; }
+            25% { transform: translate(50px, -30px) scale(1.2); opacity: 0.5; }
+            50% { transform: translate(-20px, -60px) scale(0.9); opacity: 0.3; }
+            75% { transform: translate(-40px, 20px) scale(1.1); opacity: 0.45; }
+        }
+        
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: rgba(100, 150, 255, 0.6);
+            border-radius: 50%;
+            animation: drift var(--duration) linear infinite;
+        }
+        
+        @keyframes drift {
+            0% { transform: translate(0, 0) scale(1); opacity: 0; }
+            10% { opacity: 0.8; }
+            90% { opacity: 0.8; }
+            100% { transform: translate(var(--moveX), var(--moveY)) scale(0); opacity: 0; }
+        }
+        
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 2;
+        }
+        
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle var(--duration) ease-in-out infinite;
+            animation-delay: var(--delay);
+            opacity: 0;
+        }
+        
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.1; transform: scale(0.8); }
+            30% { opacity: 0.9; transform: scale(1.4); }
+            60% { opacity: 0.3; transform: scale(1); }
+        }
+        
+        .shooting-star {
+            position: absolute;
+            width: 2px;
+            height: 80px;
+            background: linear-gradient(to bottom, rgba(180, 200, 255, 0.9), rgba(100, 150, 255, 0.3), transparent);
+            border-radius: 50%;
+            animation: shoot var(--duration) linear infinite;
+            animation-delay: var(--delay);
+            opacity: 0;
+            transform: rotate(-35deg);
+        }
+        
+        @keyframes shoot {
+            0% { opacity: 0; transform: translate(0, 0) rotate(-35deg) scale(1); }
+            3% { opacity: 1; }
+            10% { opacity: 0; transform: translate(-400px, 400px) rotate(-35deg) scale(0.3); }
+            100% { opacity: 0; transform: translate(-400px, 400px) rotate(-35deg) scale(0.3); }
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 2.5rem;
+            background: rgba(8, 8, 30, 0.8);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            box-shadow: 0 10px 60px rgba(20, 40, 120, 0.3);
+            border: 1px solid rgba(60, 80, 180, 0.15);
+            position: relative;
+            z-index: 3;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+        
+        .avatar-container {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 1.5rem;
+        }
+        
+        .avatar {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: 3px solid rgba(100, 130, 220, 0.5);
+            box-shadow: 0 0 45px rgba(60, 100, 200, 0.35);
+            object-fit: cover;
+        }
+        
+        .moon-badge {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            font-size: 2rem;
+            animation: floatMoon 3s ease-in-out infinite;
+        }
+        
+        @keyframes floatMoon {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-12px) rotate(5deg); }
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            background: linear-gradient(135deg, #8899dd, #5577cc, #8899dd);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.3rem;
+        }
+        
+        .subtitle {
+            color: #8899cc;
+            font-size: 1.1rem;
+            letter-spacing: 2px;
+        }
+        
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+            flex-wrap: wrap;
+        }
+        
+        .social-link {
+            background: linear-gradient(135deg, rgba(40, 60, 150, 0.25), rgba(20, 40, 120, 0.25));
+            color: #8899dd;
+            padding: 0.6rem 1.8rem;
+            text-decoration: none;
+            border-radius: 25px;
+            border: 1px solid rgba(70, 100, 200, 0.3);
+            transition: all 0.3s;
+            font-weight: 500;
+            backdrop-filter: blur(5px);
+            cursor: pointer;
+        }
+        
+        .social-link:hover {
+            background: linear-gradient(135deg, rgba(50, 80, 180, 0.5), rgba(30, 60, 160, 0.5));
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(40, 80, 200, 0.4);
+            color: #fff;
+            border-color: rgba(100, 140, 240, 0.6);
+        }
+
+        .copy-tooltip {
+            position: relative;
+        }
+        
+        .copy-tooltip::after {
+            content: '點擊複製 ID';
+            position: absolute;
+            bottom: -35px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.8);
+            color: #fff;
+            padding: 4px 12px;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+            white-space: nowrap;
+        }
+        
+        .copy-tooltip:hover::after {
+            opacity: 1;
+        }
+
+        .copied-toast {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(70, 100, 220, 0.9);
+            color: white;
+            padding: 10px 24px;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            z-index: 999;
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+        }
+        
+        .section {
+            margin: 2rem 0;
+            padding: 1.8rem;
+            background: rgba(12, 12, 40, 0.55);
+            border-radius: 15px;
+            border-left: 4px solid #4466bb;
+            transition: all 0.3s;
+            backdrop-filter: blur(5px);
+        }
+        
+        .section:hover {
+            transform: translateX(6px);
+            box-shadow: 0 5px 35px rgba(30, 60, 160, 0.25);
+            border-left-color: #7799ee;
+        }
+        
+        h2 {
+            color: #8899dd;
+            margin-bottom: 1.2rem;
+            font-size: 1.4rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .about-text {
+            color: #c0c8e0;
+            font-size: 1.05rem;
+        }
+
+        .about-text p {
+            margin-bottom: 1rem;
+        }
+
+        .about-text p:last-child {
+            margin-bottom: 0;
+        }
+        
+        .specialty-list {
+            list-style: none;
+            padding: 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+        }
+
+        .specialty-item {
+            background: linear-gradient(135deg, rgba(30, 50, 140, 0.3), rgba(20, 40, 120, 0.3));
+            color: #aabbee;
+            padding: 0.6rem 1.4rem;
+            border-radius: 25px;
+            font-size: 1rem;
+            border: 1px solid rgba(60, 90, 200, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s;
+        }
+
+        .specialty-item:hover {
+            background: linear-gradient(135deg, rgba(40, 70, 180, 0.5), rgba(50, 80, 190, 0.5));
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(30, 60, 180, 0.3);
+            color: #fff;
+        }
+
+        /* 偶像卡片 */
+        .idol-card {
+            display: inline-flex;
+            align-items: center;
+            gap: 1rem;
+            background: linear-gradient(135deg, rgba(255, 180, 50, 0.15), rgba(255, 140, 30, 0.1));
+            border: 1px solid rgba(255, 180, 50, 0.3);
+            padding: 0.8rem 1.5rem;
+            border-radius: 15px;
+            margin-top: 0.5rem;
+            transition: all 0.3s;
+        }
+
+        .idol-card:hover {
+            box-shadow: 0 5px 25px rgba(255, 180, 50, 0.2);
+            transform: translateY(-2px);
+            border-color: rgba(255, 180, 50, 0.5);
+        }
+
+        .idol-emoji {
+            font-size: 2rem;
+        }
+
+        .idol-name {
+            color: #ffcc66;
+            font-size: 1.2rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+        
+        .quote {
+            text-align: center;
+            font-style: italic;
+            color: #8899cc;
+            margin-top: 1.5rem;
+            font-size: 1.05rem;
+            padding: 1.8rem;
+            border-top: 1px solid rgba(60, 90, 200, 0.2);
+            border-bottom: 1px solid rgba(60, 90, 200, 0.2);
+            line-height: 1.8;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 2.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(60, 90, 200, 0.2);
+            color: #5566aa;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 1rem;
+                padding: 1.5rem;
+            }
+            h1 {
+                font-size: 2rem;
+            }
+            .orb {
+                display: none;
+            }
+            .particle {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 左上角製作標籤 -->
+    <div class="credit">寒星 Coldstar 製作</div>
+
+    <div class="animated-bg">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+        <div class="orb orb-4"></div>
+    </div>
+    
+    <div class="particles" id="particles"></div>
+    <div class="stars" id="stars"></div>
+
+    <div class="copied-toast" id="toast">✅ 已複製 Discord ID！</div>
+    
+    <div class="container">
+        <header class="header">
+            <div class="avatar-container">
+                <img src="avatar.png" alt="星月頭像" class="avatar">
+                <span class="moon-badge">🌙</span>
+            </div>
+            <h1>星月｜Xinyue</h1>
+            <p class="subtitle">✦ Discord Bot 開發者 · Roblox Studio 創作者 ✦</p>
+            
+            <div class="social-links">
+                <a href="https://youtube.com/@xinyue._tw?si=wPa2_8MAeE6xw5oI" class="social-link" target="_blank">▶️ YouTube</a>
+                <span class="social-link copy-tooltip" onclick="copyDiscord()">💬 Discord</span>
+            </div>
+        </header>
+
+        <section class="section">
+            <h2>🌙 關於我</h2>
+            <div class="about-text">
+                <p>你好，我是 <strong>星月 Xinyue</strong>，一位熱愛創作的開發者。</p>
+                <p>我主要專注於 <strong>Discord Bot</strong> 與 <strong>Roblox Studio</strong> 的開發，喜歡透過學習程式寫作將腦中的想法化為真正能運作的作品。對我來說，每一個專案都不只是完成一項功能，而是一個學習、探索與突破自己的過程。</p>
+                <p>我喜歡研究新的技術、嘗試不同的開發方式，也樂於挑戰各種有趣的點子。從規劃、設計到實作，每一個細節都值得投入心力。我希望自己製作的不只是能正常運作的作品，更是兼顧穩定性、實用性與良好使用體驗的作品。</p>
+                <p>我相信，程式開發沒有真正的終點，只有持續學習與不斷進步。未來我也會持續累積經驗、精進技術，打造更多有價值且值得分享的作品。</p>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>🎯 專長</h2>
+            <ul class="specialty-list">
+                <li class="specialty-item">🤖 Discord 機器人開發</li>
+                <li class="specialty-item">🎮 Roblox Studio 遊戲開發</li>
+                <li class="specialty-item">⚡ 自動化工具開發</li>
+            </ul>
+        </section>
+
+        <section class="section">
+            <h2>🏀 偶像</h2>
+            <div class="idol-card">
+                <span class="idol-emoji">🏀</span>
+                <span class="idol-name">Stephen Curry</span>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>💡 我的理念</h2>
+            <div class="about-text">
+                <p>技術的價值，不只是解決問題，更是把創意化為現實。</p>
+                <p>我相信，每一次挑戰都能累積經驗，每一次完成作品都是成長的證明。保持熱情、持續學習、勇於突破，才能在每一次開發中遇見更好的自己。</p>
+            </div>
+        </section>
+
+        <div class="quote">
+            ✨<br>
+            「把每一次靈感化為作品，把每一次挑戰化為經驗，<br>
+            讓今天的努力，成為明天最好的答案。」
+        </div>
+
+        <footer>
+            <p>© 2024 星月 Xinyue | Built with 🌙 under the stars</p>
+        </footer>
+    </div>
+
+    <script>
+        function copyDiscord() {
+            navigator.clipboard.writeText('xinyue._0204').then(() => {
+                const toast = document.getElementById('toast');
+                toast.style.opacity = '1';
+                setTimeout(() => {
+                    toast.style.opacity = '0';
+                }, 2000);
+            });
+        }
+
+        const starsContainer = document.getElementById('stars');
+        const starCount = 150;
+        
+        for (let i = 0; i < starCount; i++) {
+            const star = document.createElement('div');
+            star.classList.add('star');
+            
+            const size = Math.random() * 2.5 + 0.8;
+            const x = Math.random() * 100;
+            const y = Math.random() * 100;
+            const duration = Math.random() * 4 + 2;
+            const delay = Math.random() * 6;
+            
+            star.style.cssText = `
+                width: ${size}px;
+                height: ${size}px;
+                left: ${x}%;
+                top: ${y}%;
+                --duration: ${duration}s;
+                --delay: ${delay}s;
+            `;
+            
+            starsContainer.appendChild(star);
+        }
+        
+        for (let i = 0; i < 3; i++) {
+            const shootingStar = document.createElement('div');
+            shootingStar.classList.add('shooting-star');
+            
+            const startX = Math.random() * 70 + 15;
+            const startY = Math.random() * 40;
+            const duration = Math.random() * 5 + 5;
+            const delay = Math.random() * 12;
+            
+            shootingStar.style.cssText = `
+                left: ${startX}%;
+                top: ${startY}%;
+                --duration: ${duration}s;
+                --delay: ${delay}s;
+            `;
+            
+            starsContainer.appendChild(shootingStar);
+        }
+        
+        const particlesContainer = document.getElementById('particles');
+        const particleCount = 30;
+        
+        for (let i = 0; i < particleCount; i++) {
+            const particle = document.createElement('div');
+            particle.classList.add('particle');
+            
+            const size = Math.random() * 2 + 1;
+            const x = Math.random() * 100;
+            const y = Math.random() * 100;
+            const duration = Math.random() * 15 + 10;
+            const delay = Math.random() * 10;
+            const moveX = (Math.random() - 0.5) * 300;
+            const moveY = (Math.random() - 0.5) * 300;
+            
+            particle.style.cssText = `
+                width: ${size}px;
+                height: ${size}px;
+                left: ${x}%;
+                top: ${y}%;
+                --duration: ${duration}s;
+                --moveX: ${moveX}px;
+                --moveY: ${moveY}px;
+                animation-delay: ${delay}s;
+            `;
+            
+            particlesContainer.appendChild(particle);
+        }
+    </script>
+</body>
+</html>
